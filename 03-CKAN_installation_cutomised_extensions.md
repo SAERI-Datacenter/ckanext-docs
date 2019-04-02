@@ -182,7 +182,31 @@ look at the last one
 
     sudo chmod 666 /usr/lib/ckan/default/src/ckan/ckan/public/base/i18n/fr.js
 
-go to the `saerischema` directory and create two txt files: `ckan_ip.txt` and `ckan_api_key.txt`
+> NOTE With the restricted plugin we are introducing the data request form to the CKAN data portal.
+the data request is based on a system so that if a data is restricted can only be requested by the data
+requestor. In order to request the data, the requestor has to register and hence send a mail to the data manager. In order to receive mails, we need to configure the mail system in the production.ini file
+
+Open
+
+   nano etc/ckan/default/production.ini
+
+then modify the "Email settings" below accordingly to each territory. Example below is for a data manager sitting in Dundee and using smtp server at the satellite receiving station.
+
+## Email settings
+
+email_to = imarengo@saeri.ac.fk
+#error_email_from = ckan-errors@example.com
+smtp.server = mail.sat.dundee.ac.uk
+#smtp.starttls = False
+#smtp.user = username@example.com
+#smtp.password = your_password
+smtp.mail_from = ckan@localhost
+
+Save the file and then restart apache2
+
+     sudo service apache2 restart
+
+Go to the `saerischema` directory and create two txt files: `ckan_ip.txt` and `ckan_api_key.txt`
 
     cd /usr/lib/ckan/default/src/ckanext-saerischema/ckanext/saerischema
 
@@ -210,6 +234,6 @@ import the metadata file content to CKAN
 
 **REMEMEBER** that everytime a metadata file is imported to CKAN the `. /ckan_add_dataset.py` METADATA_FILENAME.csv MUST be RUN
 
-Run this program ONLY to delete all recently-added datasets. This is intended to allow you to delete datasets which were added mistakenly or during testing, but keep all older ones. The cut-off date is configured inside the code so you will need to edit it.
+Run this program ONLY to delete all recently-added datasets. This is intended to allow you to delete datasets which were added by mistake or during testing, but keep all older ones. The cut-off date is configured inside the code so you will need to edit it.
 
     ./ckan_delete_dataset.py
